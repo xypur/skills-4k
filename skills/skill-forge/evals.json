@@ -1,0 +1,38 @@
+{
+  "skill_name": "skill-forge",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "我想把我们的 API 错误处理约定做成一个 skill：统一错误码命名、错误响应结构、以及什么时候抛异常什么时候返回错误对象。帮我从零创建这个技能包。",
+      "expected_output": "Captures intent (trigger scenarios, verifiability), scaffolds <skill-name>/ with SKILL.md + evals.json (+ references if needed), writes a description carrying what+when with 3+ trigger scenarios, body under 500 lines with progressive disclosure, and plans 2-3 test prompts with expectations.",
+      "expectations": [
+        "Package layout follows the scaffold (kebab-case dir, SKILL.md with name/description frontmatter, evals.json at skill root)",
+        "The description contains both capability and 3+ concrete trigger scenarios, no usage instructions",
+        "Body stays under 500 lines and pushes detailed material to references/ with when-to-read pointers",
+        "Proposes 2-3 realistic test prompts with expectations for the verifiable parts"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "为我们的 code-review-checklist 技能设计触发评测：我要验证新的 description 会不会更准确地触发，现在只会用 claude 命令行的方式想测试但环境里跑不了。给我一套可执行的方案。",
+      "expected_output": "Proposes a 20-query trigger eval set (8-10 should-trigger + 8-10 near-miss should-not), selects the simulated judge strategy (fresh context, descriptions only) since claude -p is unavailable, mentions 60/40 holdout and selection by holdout score, and notes the native strategy as the higher-fidelity upgrade path.",
+      "expectations": [
+        "Proposes ~20 realistic queries with a near-miss should-not set (not obviously-irrelevant negatives)",
+        "Selects the simulated judge strategy given the runner constraint, and keeps the judge fresh-context and description-only",
+        "Mentions holdout-based selection to avoid overfitting the description to the query set",
+        "Names the higher-fidelity native strategy as the upgrade path rather than presenting simulated as ground truth"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "我们技能的基准跑完了：with_skill 100%，without_skill 也 92%，我看不出技能到底有没有用。帮我分析这个结果并决定下一步。",
+      "expected_output": "Suspects non-discriminating assertions or baseline contamination; recommends checking whether baseline runs could discover the skill (contamination rule), identifying assertions that pass in both arms, tightening expectations or eval prompts, and only then re-running — not blindly trusting the delta.",
+      "expectations": [
+        "Raises baseline contamination as a first-class suspect (without_skill agents discovering the skill in-repo)",
+        "Recommends auditing which assertions pass in both configurations (non-discriminating) before concluding anything",
+        "Proposes concrete next steps: tighten expectations, make eval prompts more skill-dependent, or re-run baselines from a pruned/neutral cwd",
+        "Does not recommend celebrating or shipping based on the 92% baseline number alone"
+      ]
+    }
+  ]
+}

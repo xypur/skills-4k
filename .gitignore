@@ -1,0 +1,10 @@
+# Derived from the dev/coding/skills repo convention
+
+example
+/temp/
+
+.claude/
+.pi/
+
+# skill-forge eval workspaces
+*-workspace/
